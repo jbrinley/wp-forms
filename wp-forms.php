@@ -39,6 +39,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 if ( !function_exists('WP_Forms_load') ) {
 	function WP_Forms_load() {
 		require_once('classes/WP_Form_Plugin.php');
+		require_once('template-tags.php');
 		WP_Form_Plugin::init(__FILE__);
 	}
 	// Fire it up!

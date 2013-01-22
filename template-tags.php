@@ -4,13 +4,18 @@
  * @param string $form_id
  * @param callback $callback
  *
+ * @throws InvalidArgumentException when WP_DEBUG is on
  * @return bool TRUE if the form was registered, otherwise FALSE
  */
 function wp_register_form( $form_id, $callback ) {
-	try {
-		WP_Form::register($form_id, $callback);
+	$registrar = WP_Form_Registrar::get_instance();
+	try { // mask the exceptions for the non-OO API
+		$registrar->register( $form_id, $callback );
 		return TRUE;
 	} catch ( InvalidArgumentException $e ) {
+		if ( defined('WP_DEBUG') && WP_DEBUG ) {
+			throw $e;
+		}
 		return FALSE; // the form was not registered
 	}
 }
@@ -24,5 +29,28 @@ function wp_register_form( $form_id, $callback ) {
  * Either way, it's not registered anymore
  */
 function wp_deregister_form( $form_id ) {
-	return WP_Form::deregister($form_id);
+	$registrar = WP_Form_Registrar::get_instance();
+	return $registrar->deregister( $form_id );
+}
+
+
+/**
+ * Get a registered form
+ *
+ * @param string $form_id
+ *
+ * @throws Exception when WP_DEBUG is on
+ * @return bool|WP_Form
+ */
+function wp_get_form( $form_id ) {
+	$registrar = WP_Form_Registrar::get_instance();
+	try {
+		$form = $registrar->get_form($form_id);
+	} catch ( Exception $e ) {
+		if ( defined('WP_DEBUG') && WP_DEBUG ) {
+			throw $e;
+		}
+		return FALSE;
+	}
+	return $form;
 }

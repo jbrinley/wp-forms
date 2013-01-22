@@ -43,13 +43,22 @@ class WP_Form_Plugin {
 	public static function init( $plugin_file ) {
 		self::$plugin_file = $plugin_file;
 		spl_autoload_register(array(__CLASS__, 'autoloader'));
+		add_action( 'init', array( 'WP_Form_Registrar', 'init' ), 11, 0 );
 	}
 
 	public static function autoloader( $class ) {
-		if ( strpos( $class, 'WP_Form') !== 0 ) {
+		if ( strpos( $class, 'WP_Form' ) !== 0 ) {
 			return;
 		}
 		$dir = self::plugin_path('classes');
+
+		if ( strpos( $class, 'WP_Form_Element' ) === 0 ) {
+			$dir .= '/elements';
+		} elseif ( strpos( $class, 'WP_Form_View' ) === 0 ) {
+			$dir .= '/views';
+		} elseif ( strpos( $class, 'WP_Form_Decorator' ) === 0 ) {
+			$dir .= '/views/decorators';
+		}
 
 		if ( file_exists("$dir/$class.php") ) {
 			include_once("$dir/$class.php");
