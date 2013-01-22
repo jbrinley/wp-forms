@@ -15,7 +15,13 @@ class WP_Form_Listener {
 		if ( !wp_verify_nonce($_REQUEST['wp_form_nonce'], $_REQUEST['wp_form_id']) ) {
 			return;
 		}
-		wp_get_form($_REQUEST['wp_form_id']); // the registrar handles things from here
+		$form = wp_get_form($_REQUEST['wp_form_id']);
+		$form->set_submitted_values($_REQUEST);
+		$valid = $form->validate();
+		if ( !$valid ) {
+			return; // form will display its error messages when it renders
+		}
+		$form->submit();
 	}
 
 	/********** Singleton *************/

@@ -145,4 +145,21 @@ class WP_Form implements WP_Form_Component {
 		$this->add_element(WP_Form_Element::create('hidden')->set_name('wp_form_id')->set_value($this->id)->set_priority(-10));
 		$this->add_element(WP_Form_Element::create('hidden')->set_name('wp_form_nonce')->set_value($nonce)->set_priority(-10));
 	}
+
+	public function set_submitted_values( array $values ) {
+		// TODO: implement WP_Form::set_submitted_values()
+	}
+
+	public function clear_submitted_values() {
+		// TODO: implement WP_Form::clear_submitted_values()
+	}
+
+	public function validate() {
+		// TODO: implement WP_Form::validate()
+		return TRUE;
+	}
+
+	public function submit() {
+		// TODO: implement WP_Form::submit()
+	}
 }
