@@ -6,9 +6,4 @@ class WP_Form_Element_Submit extends WP_Form_Element {
 	protected $default_decorators = array(
 		'WP_Form_Decorator_HtmlTag' => array(),
 	);
-
-	public function set_label( $label ) {
-		$this->set_value($label);
-		return parent::set_label($label);
-	}
 }

@@ -3,10 +3,13 @@
 /**
  * List magic properties for code completion:
  *
- * @property string type
+ * @property-read string type
  * @property int priority
  * @property string label
  * @property string name
+ * @property string default_value
+ * @property string value
+ * @property string description
  */
 class WP_Form_Element implements WP_Form_Component {
 	protected $type = 'text';
@@ -15,7 +18,7 @@ class WP_Form_Element implements WP_Form_Component {
 	protected $name = '';
 	protected $default_value = '';
 	protected $value = '';
-	protected $name_context = '';
+	protected $description = '';
 
 	protected $attributes;
 	protected $children;
@@ -43,19 +46,10 @@ class WP_Form_Element implements WP_Form_Component {
 	}
 	public function __set( $name, $value ) {
 		if ( method_exists( $this, 'set_'.$name ) ) {
-			$this->{'set_'.$name}();
+			$this->{'set_'.$name}( $value );
 		} else {
 			throw new InvalidArgumentException(sprintf(__('Undefined property: %s'), $name));
 		}
-	}
-
-	/**
-	 * @param $type
-	 * @return WP_Form_Element
-	 */
-	public function set_type( $type ) {
-		$this->type = $type;
-		return $this;
 	}
 
 	public function get_type() {
@@ -67,28 +61,8 @@ class WP_Form_Element implements WP_Form_Component {
 		return $this;
 	}
 
-	public function get_name( $with_context = TRUE ) {
-		$name = $this->name;
-		$context = $this->get_name_context();
-		if ( !$with_context || empty($context) ) {
-			return $name;
-		}
-		if ( $position = strpos($name, '[') ) {
-			$name = '['.substr($name, 0, $position).']'.substr($name, $position);
-		} else {
-			$name = '['.$name.']';
-		}
-		$name = $context.$name;
-		return $name;
-	}
-
-	public function get_name_context() {
-		return $this->name_context;
-	}
-
-	public function set_name_context( $context ) {
-		$this->name_context = $context;
-		return $this;
+	public function get_name() {
+		return $this->name;
 	}
 
 	/**
@@ -129,20 +103,42 @@ class WP_Form_Element implements WP_Form_Component {
 		return $this->label;
 	}
 
-	public static function create( $type, $args = array() ) {
-		$element = NULL;
-		$classes = array( $type, 'WP_Form_Element_'.ucfirst($type) );
-		$classes = apply_filters( 'wp_form_element_classes', $classes, $type );
-		foreach ( $classes as $class ) {
-			if ( class_exists($class) ) {
-				$element = new $class( $args );
-				break;
-			}
-		}
-		if ( empty($element) ) {
-			$element = new self( array_merge(array( 'type' => $type ), $args) );
-		}
-		return $element;
+	/**
+	 * @return mixed
+	 */
+	public function get_value() {
+		return $this->value;
+	}
+
+	public function set_value( $value ) {
+		$this->value = $value;
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_description() {
+		return $this->description;
+	}
+
+	public function set_description( $description ) {
+		$this->description = $description;
+		return $this;
+	}
+
+	/**
+	 * Get the attributes for the component. Attribute names
+	 * should be keys, and their values should be unescaped strings or arrays.
+	 *
+	 * @return array
+	 */
+	public function get_attributes() {
+		// TODO: Implement get_attributes() method.
+	}
+
+	public function get_id() {
+		// TODO
 	}
 
 	public function render( $force = FALSE ) {
@@ -153,16 +149,6 @@ class WP_Form_Element implements WP_Form_Component {
 		$html = $view->render( $this );
 		$this->rendered = TRUE;
 		return $html;
-	}
-
-	public function add_child( $key, $definition ) {
-		// TODO
-		return $this;
-	}
-
-	public function remove_child( $key ) {
-		// TODO
-		return $this;
 	}
 
 	public function get_view() {
@@ -226,49 +212,30 @@ class WP_Form_Element implements WP_Form_Component {
 	}
 
 	/**
-	 * @return mixed
-	 */
-	public function get_value() {
-		return $this->value;
-	}
-
-	public function set_value( $value ) {
-		$this->value = $value;
-		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function get_description() {
-		// TODO: Implement get_description() method.
-	}
-
-	/**
-	 * Get the attributes for the component. Attribute names
-	 * should be keys, and their values should be unescaped strings or arrays.
-	 *
-	 * @return array
-	 */
-	public function get_attributes() {
-		// TODO: Implement get_attributes() method.
-	}
-
-	public function get_id() {
-		// TODO
-	}
-
-	/**
 	 * @param WP_Form_Element[] $elements
 	 */
 	public static function sort_elements( array &$elements ) {
-		uasort($elements, array( __CLASS__, 'priority_sort') );
+		// use a schwartzian transform to keep elements with the same priority in the same order
+		// see http://notmysock.org/blog/php/schwartzian-transform.html
+		array_walk( $elements, create_function( '&$v, $k' , '$v = array( $v->priority, $k, $v );'));
+		asort($elements); // sorts by priority, then key
+		array_walk( $elements, create_function( '&$v, $k', '$v = $v[2];'));
 	}
 
-	public static function priority_sort( $a, $b ) {
-		if ( $a->priority == $b->priority ) {
-			return 0;
+
+	public static function create( $type, $args = array() ) {
+		$element = NULL;
+		$classes = array( $type, 'WP_Form_Element_'.ucfirst($type) );
+		$classes = apply_filters( 'wp_form_element_classes', $classes, $type );
+		foreach ( $classes as $class ) {
+			if ( class_exists($class) ) {
+				$element = new $class( $args );
+				break;
+			}
 		}
-		return ($a->priority < $b->priority) ? -1 : 1;
+		if ( empty($element) ) {
+			$element = new self( array_merge(array( 'type' => $type ), $args) );
+		}
+		return $element;
 	}
 }
