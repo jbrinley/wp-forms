@@ -18,14 +18,36 @@ class WP_Form implements WP_Form_Component {
 
 	/**
 	 * @param WP_Form_Component $element
+	 * @param string $key A key for referencing the element. Defaults to the element's name
+	 * @throws InvalidArgumentException
 	 * @return WP_Form
 	 */
-	public function add_element( WP_Form_Component $element ) {
-		$key = $element->get_name();
+	public function add_element( WP_Form_Component $element, $key = '' ) {
+		if ( empty($key) ) {
+			$key = $element->get_name();
+		}
+		if ( empty($key) ) {
+			throw new InvalidArgumentException(__('Cannot add nameless element to form', 'wp-forms'));
+		}
 		$this->elements[$key] = $element;
 		return $this;
 	}
 
+	/**
+	 * @param $key
+	 * @return null|WP_Form_Component
+	 */
+	public function get_element( $key ) {
+		if ( empty($this->elements[$key]) ) {
+			return NULL;
+		}
+		return $this->elements[$key];
+	}
+
+	/**
+	 * @param $key
+	 * @return WP_Form
+	 */
 	public function remove_element( $key ) {
 		if ( isset($this->elements[$key]) ) {
 			unset($this->elements[$key]);

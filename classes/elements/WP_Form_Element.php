@@ -33,9 +33,7 @@ class WP_Form_Element implements WP_Form_Component {
 	);
 	protected $rendered = FALSE;
 
-	public function __construct( $args = array() ) {
-
-	}
+	public function __construct() {}
 
 	public function __get( $name ) {
 		if ( method_exists( $this, 'get_'.$name ) ) {

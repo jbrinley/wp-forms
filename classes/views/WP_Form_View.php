@@ -1,6 +1,6 @@
 <?php
 
-class WP_Form_View implements WP_Form_View_Interface {
+abstract class WP_Form_View implements WP_Form_View_Interface {
 	public function render( WP_Form_Component $element ) {
 		$type = $element->get_type();
 		if ( method_exists( $this, $type ) ) {
