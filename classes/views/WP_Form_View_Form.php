@@ -8,7 +8,7 @@ class WP_Form_View_Form extends WP_Form_View {
 			esc_attr($form->get_id()),
 			esc_attr($form->get_action()),
 			esc_attr($form->get_method()),
-			WP_Form_View::prepare_attributes($form->get_attributes()),
+			WP_Form_View::prepare_attributes($form->get_all_attributes()),
 			$form->render_children()
 		);
 	}

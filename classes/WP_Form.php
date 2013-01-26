@@ -1,12 +1,12 @@
 <?php
 
-class WP_Form implements WP_Form_Component {
+class WP_Form implements WP_Form_Component, WP_Form_Attributes_Interface {
 	/** @var WP_Form_Component[] */
 	protected $elements = array();
-	protected $method = 'post';
-	protected $action = '';
-	protected $classes = array();
-	protected $attributes = array();
+
+	/** @var WP_Form_Attributes_Interface */
+	protected $attributes = NULL;
+
 	/** @var WP_Form_View_Form */
 	protected $view = NULL;
 	protected $rendered = 0; // the number of times the form has been rendered
@@ -14,6 +14,8 @@ class WP_Form implements WP_Form_Component {
 
 	public function __construct( $id ) {
 		$this->id = $id;
+		$this->attributes = new WP_Form_Attributes();
+		$this->set_default_attributes();
 	}
 
 	/**
@@ -91,53 +93,53 @@ class WP_Form implements WP_Form_Component {
 	}
 
 	public function set_action( $action ) {
-		$this->action = $action;
+		$this->attributes->set_attribute('action', $action);
 		return $this;
 	}
 
 	public function get_action() {
-		return $this->action;
+		return $this->attributes->get_attribute('action');
 	}
 
 	public function set_method( $method ) {
-		$method = strtolower($method);
-		$this->method = $method;
+		$this->attributes->set_attribute('method', strtolower($method));
 		return $this;
 	}
 
 	public function get_method() {
-		return $this->method;
+		return $this->attributes->get_attribute('method');
 	}
 
-	public function get_attributes() {
-		return $this->attributes;
+	public function get_all_attributes() {
+		return $this->attributes->get_all_attributes();
 	}
 
 	public function get_attribute( $key ) {
-		if ( isset($this->attributes[$key]) ) {
-			return $this->attributes[$key];
-		} else {
-			return NULL;
-		}
+		return $this->attributes->get_attribute($key);
 	}
 
 	public function set_attribute( $key, $value ) {
-		if ( $key == 'class' && !is_array($value) ) {
-			$value = explode(' ', $value);
-		}
-		$this->attributes[$key] = $value;
+		$this->attributes->set_attribute($key, $value);
 		return $this;
 	}
 
 	public function add_class( $class ) {
-		if ( empty($class) ) {
-			return $this;
-		}
-		if ( empty($this->attributes['class']) ) {
-			$this->attributes['class'] = array();
-		}
-		$this->attributes['class'][] = $class;
+		$this->attributes->add_class($class);
 		return $this;
+	}
+
+	public function remove_class( $class ) {
+		$this->attributes->remove_class($class);
+		return $this;
+	}
+
+	public function set_classes( array $classes ) {
+		$this->attributes->set_classes($classes);
+		return $this;
+	}
+
+	public function get_classes() {
+		return $this->attributes->get_classes();
 	}
 
 	/**
@@ -156,10 +158,7 @@ class WP_Form implements WP_Form_Component {
 	}
 
 	public function get_id() {
-		if ( !empty($this->attributes['id']) ) {
-			return $this->attributes['id'];
-		}
-		return $this->id;
+		return $this->attributes->get_attribute('id');
 	}
 
 	public function setup_nonce_fields() {
@@ -183,5 +182,10 @@ class WP_Form implements WP_Form_Component {
 
 	public function submit() {
 		// TODO: implement WP_Form::submit()
+	}
+
+	private function set_default_attributes() {
+		$this->set_method('post');
+		$this->set_attribute('id', $this->id);
 	}
 }

@@ -11,7 +11,7 @@
  * @property string value
  * @property string description
  */
-class WP_Form_Element implements WP_Form_Component {
+class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface {
 	protected $type = 'text';
 	protected $priority = 10;
 	protected $label = '';
@@ -20,7 +20,9 @@ class WP_Form_Element implements WP_Form_Component {
 	protected $value = '';
 	protected $description = '';
 
-	protected $attributes;
+
+	/** @var WP_Form_Attributes_Interface */
+	protected $attributes = NULL;
 	protected $children;
 	protected $options;
 	protected $view;
@@ -33,7 +35,9 @@ class WP_Form_Element implements WP_Form_Component {
 	);
 	protected $rendered = FALSE;
 
-	public function __construct() {}
+	public function __construct() {
+		$this->attributes = new WP_Form_Attributes();
+	}
 
 	public function __get( $name ) {
 		if ( method_exists( $this, 'get_'.$name ) ) {
@@ -44,7 +48,7 @@ class WP_Form_Element implements WP_Form_Component {
 	}
 	public function __set( $name, $value ) {
 		if ( method_exists( $this, 'set_'.$name ) ) {
-			$this->{'set_'.$name}( $value );
+			return $this->{'set_'.$name}( $value );
 		} else {
 			throw new InvalidArgumentException(sprintf(__('Undefined property: %s'), $name));
 		}
@@ -125,18 +129,8 @@ class WP_Form_Element implements WP_Form_Component {
 		return $this;
 	}
 
-	/**
-	 * Get the attributes for the component. Attribute names
-	 * should be keys, and their values should be unescaped strings or arrays.
-	 *
-	 * @return array
-	 */
-	public function get_attributes() {
-		// TODO: Implement get_attributes() method.
-	}
-
 	public function get_id() {
-		// TODO
+		return $this->attributes->get_attribute('id');
 	}
 
 	public function render( $force = FALSE ) {
@@ -208,6 +202,80 @@ class WP_Form_Element implements WP_Form_Component {
 	public function is_rendered() {
 		return $this->rendered;
 	}
+
+	/* WP_Form_Attributes_Interface ***********************
+	*******************************************************/
+
+
+	/**
+	 * @param string $key
+	 * @param string $value
+	 *
+	 * @return WP_Form_Element
+	 */
+	public function set_attribute( $key, $value ) {
+		$this->attributes->set_attribute($key, $value);
+		return $this;
+	}
+
+	/**
+	 * @param string $key
+	 *
+	 * @return string
+	 */
+	public function get_attribute( $key ) {
+		return $this->attributes->get_attribute($key);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_all_attributes() {
+		$attributes = $this->attributes->get_all_attributes();
+		// TODO: add attributes not managed by the attributes object
+		return $attributes;
+		// TODO: Implement get_all_attributes() method.
+	}
+
+	/**
+	 * @param string $class
+	 *
+	 * @return WP_Form_Element
+	 */
+	public function add_class( $class ) {
+		$this->attributes->add_class($class);
+		return $this;
+	}
+
+	/**
+	 * @param string $class
+	 *
+	 * @return WP_Form_Element
+	 */
+	public function remove_class( $class ) {
+		$this->attributes->remove_class($class);
+		return $this;
+	}
+
+	/**
+	 * @param array $classes
+	 *
+	 * @return WP_Form_Element
+	 */
+	public function set_classes( array $classes ) {
+		$this->attributes->set_classes($classes);
+		return $this;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_classes() {
+		return $this->attributes->get_classes();
+	}
+
+	/* Static class interface ****************
+	******************************************/
 
 	/**
 	 * @param WP_Form_Element[] $elements
