@@ -66,6 +66,38 @@ class WP_Form_Plugin {
 		}
 	}
 
+	/**
+	 * Build a unique ID for a callback.
+	 *
+	 * Basically the same as _wp_filter_build_unique_id(),
+	 * only slightly less complicated, and public
+	 *
+	 * @see _wp_filter_build_unique_id()
+	 *
+	 * @param callable $function
+	 * @throws InvalidArgumentException
+	 * @return string
+	 */
+	public static function unique_callback_id( $function ) {
+		if ( is_string($function) ) {
+			return $function;
+		}
+
+		if ( is_object($function) ) {
+			// Closures are currently implemented as objects
+			$function = array( $function, '' );
+		} else {
+			$function = (array) $function;
+		}
+		if (is_object($function[0]) ) {
+			return spl_object_hash($function[0]) . $function[1];
+		} elseif ( is_string($function[0]) ) {
+			// Static Calling
+			return $function[0].$function[1];
+		}
+		throw new InvalidArgumentException(__('Unrecognizable callback', 'wp-forms'));
+	}
+
 
 	/* Housekeeping */
 

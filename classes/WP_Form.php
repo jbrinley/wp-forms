@@ -12,6 +12,9 @@ class WP_Form implements WP_Form_Component, WP_Form_Attributes_Interface {
 	protected $rendered = 0; // the number of times the form has been rendered
 	protected $id = '';
 
+	protected $validators = array(); // validation callbacks
+	protected $processors = array(); // submission callbacks
+
 	public function __construct( $id ) {
 		$this->id = $id;
 		$this->attributes = new WP_Form_Attributes();
@@ -167,21 +170,54 @@ class WP_Form implements WP_Form_Component, WP_Form_Attributes_Interface {
 		$this->add_element(WP_Form_Element::create('hidden')->set_name('wp_form_nonce')->set_value($nonce)->set_priority(-10));
 	}
 
-	public function set_submitted_values( array $values ) {
-		// TODO: implement WP_Form::set_submitted_values()
+	public function add_validator( $callback, $priority = 10 ) {
+		$this->add_callback($this->validators, $callback, $priority);
+		return $this;
 	}
 
-	public function clear_submitted_values() {
-		// TODO: implement WP_Form::clear_submitted_values()
+	public function remove_validator( $callback, $priority = 10 ) {
+		$this->remove_callback($this->validators, $callback, $priority);
+		return $this;
 	}
 
-	public function validate() {
-		// TODO: implement WP_Form::validate()
-		return TRUE;
+	public function get_validators() {
+		return $this->get_callbacks($this->validators);
 	}
 
-	public function submit() {
-		// TODO: implement WP_Form::submit()
+	public function add_processor( $callback, $priority = 10 ) {
+		$this->add_callback($this->processors, $callback, $priority);
+		return $this;
+	}
+
+	public function remove_processor( $callback, $priority = 10 ) {
+		$this->remove_callback($this->processors, $callback, $priority);
+		return $this;
+	}
+
+	public function get_processors() {
+		return $this->get_callbacks($this->processors);
+	}
+
+	private function add_callback( &$collection, $callback, $priority ) {
+		$idx = WP_Form_Plugin::unique_callback_id( $callback );
+		$collection[$priority][$idx] = $callback;
+	}
+
+	private function remove_callback( &$collection, $callback, $priority ) {
+		$idx = WP_Form_Plugin::unique_callback_id( $callback );
+		if ( isset($collection[$priority][$idx]) ) {
+			unset($collection[$priority][$idx]);
+		}
+	}
+
+	private function get_callbacks( &$collection ) {
+		$priorities = array_keys($collection);
+		sort($priorities);
+		$callbacks = array();
+		foreach ( $priorities as $priority ) {
+			$callbacks = array_merge($callbacks, array_values($collection[$priority]));
+		}
+		return $callbacks;
 	}
 
 	private function set_default_attributes() {
