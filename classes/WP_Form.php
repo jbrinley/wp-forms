@@ -60,13 +60,9 @@ class WP_Form implements WP_Form_Component, WP_Form_Attributes_Interface {
 		return $this;
 	}
 
-	public function render( $force = FALSE ) {
-		if ( !$force && $this->is_rendered() ) {
-			return '';
-		}
+	public function render() {
 		$view = $this->get_view();
 		$html = $view->render( $this );
-		$this->rendered++;
 		return $html;
 	}
 

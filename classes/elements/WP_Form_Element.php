@@ -15,7 +15,6 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	protected $type = 'text';
 	protected $priority = 10;
 	protected $label = '';
-	protected $name = '';
 	protected $default_value = '';
 	protected $value = '';
 	protected $description = '';
@@ -33,7 +32,6 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 		'WP_Form_Decorator_Label' => array(),
 		'WP_Form_Decorator_HtmlTag' => array(),
 	);
-	protected $rendered = FALSE;
 
 	public function __construct() {
 		$this->attributes = new WP_Form_Attributes();
@@ -59,12 +57,12 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	}
 
 	public function set_name( $name ) {
-		$this->name = $name;
+		$this->attributes->set_attribute('name', $name);
 		return $this;
 	}
 
 	public function get_name() {
-		return $this->name;
+		return $this->attributes->get_attribute('name');
 	}
 
 	/**
@@ -133,13 +131,9 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 		return $this->attributes->get_attribute('id');
 	}
 
-	public function render( $force = FALSE ) {
-		if ( !$force && $this->rendered ) {
-			return '';
-		}
+	public function render() {
 		$view = $this->get_view();
 		$html = $view->render( $this );
-		$this->rendered = TRUE;
 		return $html;
 	}
 
@@ -214,6 +208,11 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	 * @return WP_Form_Element
 	 */
 	public function set_attribute( $key, $value ) {
+		if ( $key == 'type' ) { // we don't let the type attribute change
+			throw new InvalidArgumentException(__('"type" attribute may not be changed', 'wp-forms'));
+		} elseif ( $key == 'value' ) {
+			throw new InvalidArgumentException(__("Use WP_Form_Element::set_value() to change an element's value", 'wp-forms'));
+		}
 		$this->attributes->set_attribute($key, $value);
 		return $this;
 	}
@@ -224,7 +223,17 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	 * @return string
 	 */
 	public function get_attribute( $key ) {
-		return $this->attributes->get_attribute($key);
+		switch ( $key ) {
+			case 'type':
+				return $this->type;
+			case 'value':
+				if ( !empty($this->value) ) {
+					return $this->value;
+				}
+				return $this->default_value;
+			default:
+				return $this->attributes->get_attribute($key);
+		}
 	}
 
 	/**
@@ -232,9 +241,9 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	 */
 	public function get_all_attributes() {
 		$attributes = $this->attributes->get_all_attributes();
-		// TODO: add attributes not managed by the attributes object
+		$attributes['type'] = $this->type;
+		$attributes['value'] = $this->get_attribute('value');
 		return $attributes;
-		// TODO: Implement get_all_attributes() method.
 	}
 
 	/**
