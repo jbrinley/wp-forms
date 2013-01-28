@@ -292,7 +292,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	public static function sort_elements( array &$elements ) {
 		// use a schwartzian transform to keep elements with the same priority in the same order
 		// see http://notmysock.org/blog/php/schwartzian-transform.html
-		array_walk( $elements, create_function( '&$v, $k' , '$v = array( $v->priority, $k, $v );'));
+		array_walk( $elements, create_function( '&$v, $k' , '$v = array( $v->get_priority(), $k, $v );'));
 		asort($elements); // sorts by priority, then key
 		array_walk( $elements, create_function( '&$v, $k', '$v = $v[2];'));
 	}

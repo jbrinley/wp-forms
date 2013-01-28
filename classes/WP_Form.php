@@ -1,6 +1,6 @@
 <?php
 
-class WP_Form implements WP_Form_Component, WP_Form_Attributes_Interface {
+class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 	/** @var WP_Form_Component[] */
 	protected $elements = array();
 
@@ -40,6 +40,17 @@ class WP_Form implements WP_Form_Component, WP_Form_Attributes_Interface {
 
 	/**
 	 * @param $key
+	 * @return WP_Form
+	 */
+	public function remove_element( $key ) {
+		if ( isset($this->elements[$key]) ) {
+			unset($this->elements[$key]);
+		}
+		return $this;
+	}
+
+	/**
+	 * @param $key
 	 * @return null|WP_Form_Component
 	 */
 	public function get_element( $key ) {
@@ -50,29 +61,20 @@ class WP_Form implements WP_Form_Component, WP_Form_Attributes_Interface {
 	}
 
 	/**
-	 * @param $key
-	 * @return WP_Form
+	 * @return WP_Form_Component[], sorted by priority
 	 */
-	public function remove_element( $key ) {
-		if ( isset($this->elements[$key]) ) {
-			unset($this->elements[$key]);
-		}
-		return $this;
+	public function get_children() {
+		WP_Form_Element::sort_elements($this->elements);
+		return $this->elements;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function render() {
 		$view = $this->get_view();
 		$html = $view->render( $this );
 		return $html;
-	}
-
-	public function render_children() {
-		$children = '';
-		WP_Form_Element::sort_elements($this->elements);
-		foreach ( $this->elements as $element ) {
-			$children .= $element->render();
-		}
-		return $children;
 	}
 
 	public function __toString() {
@@ -110,7 +112,12 @@ class WP_Form implements WP_Form_Component, WP_Form_Attributes_Interface {
 	}
 
 	public function get_all_attributes() {
-		return $this->attributes->get_all_attributes();
+		$attributes = $this->attributes->get_all_attributes();
+		if ( !isset($attributes['action']) ) {
+			$attributes['action'] = ''; // required attributes
+		}
+		// TODO: automatically set enctype to multipart/form-data if a file input is included
+		return $attributes;
 	}
 
 	public function get_attribute( $key ) {
@@ -150,6 +157,10 @@ class WP_Form implements WP_Form_Component, WP_Form_Attributes_Interface {
 
 	public function get_type() {
 		return 'form';
+	}
+
+	public function get_priority() {
+		return 0;
 	}
 
 	public function get_name() {

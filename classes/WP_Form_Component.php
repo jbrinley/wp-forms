@@ -18,4 +18,9 @@ interface WP_Form_Component {
 	 * @return WP_Form_View_Interface
 	 */
 	public function get_view();
+
+	/**
+	 * @return int
+	 */
+	public function get_priority();
 }
