@@ -48,7 +48,6 @@ class WP_Form_Registrar {
 			do_action( 'wp_form_get_form', $form );
 			$this->instantiated_forms[$form_id] = $form;
 		}
-		// TODO: if the form has been submitted, validate and submit
 		return $this->instantiated_forms[$form_id];
 	}
 

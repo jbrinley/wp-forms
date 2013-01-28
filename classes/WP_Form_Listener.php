@@ -16,12 +16,13 @@ class WP_Form_Listener {
 			return;
 		}
 		$form = wp_get_form($_REQUEST['wp_form_id']);
-		$form->set_submitted_values($_REQUEST);
-		$valid = $form->validate();
-		if ( !$valid ) {
-			return; // form will display its error messages when it renders
+		$submission = new WP_Form_Submission($form, $_REQUEST);
+		if ( !$submission->is_valid() ) {
+			$errors = $submission->get_errors();
+			// TODO: set errors on the form
+			return;
 		}
-		$form->submit();
+		$submission->submit();
 	}
 
 	/********** Singleton *************/
