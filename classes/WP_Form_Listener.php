@@ -23,6 +23,7 @@ class WP_Form_Listener {
 			return;
 		}
 		$submission->submit();
+		$submission->redirect();
 	}
 
 	/********** Singleton *************/

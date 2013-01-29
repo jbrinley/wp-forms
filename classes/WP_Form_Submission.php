@@ -6,6 +6,7 @@ class WP_Form_Submission {
 	private $data = array();
 	/** @var WP_Error */
 	private $errors = NULL;
+	private $redirect = '';
 
 	public function __construct( WP_Form $form, array $data ) {
 		$this->form = $form;
@@ -48,6 +49,43 @@ class WP_Form_Submission {
 			$data = $data[$key]; // move down the array
 		}
 		return $data;
+	}
+
+	public function redirect() {
+		$url = $this->get_redirect();
+		$url = apply_filters( 'wp_forms_redirect_url', $url, $this, $this->form );
+		if ( $url === NULL ) {
+			return FALSE;
+		}
+		if ( empty($url) ) {
+			$url = $_SERVER['REQUEST_URI'];
+		}
+		wp_redirect($url);
+		exit();
+	}
+
+	public function get_redirect() {
+		// NULL means do not redirect
+		if ( $this->redirect === NULL ) {
+			return NULL;
+		}
+		// If this submission doesn't have an explicit redirect,
+		// defer to the form's default
+		if ( empty($this->redirect) ) {
+			$redirect = $this->form->get_redirect();
+			if ( empty($redirect) ) {
+				return '';
+			}
+			return $redirect;
+		}
+		return $this->redirect;
+	}
+
+	/**
+	 * @param string|NULL $url The redirect URL, or NULL to prevent redirect
+	 */
+	public function set_redirect( $url = '' ) {
+		$this->redirect = $url;
 	}
 
 	protected function validate() {

@@ -12,6 +12,8 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 	protected $rendered = 0; // the number of times the form has been rendered
 	protected $id = '';
 
+	protected $redirect = ''; // where to redirect users after this form is submitted
+
 	protected $validators = array(); // validation callbacks
 	protected $processors = array(); // submission callbacks
 
@@ -91,6 +93,15 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 	public function set_view( WP_Form_View $view ) {
 		$this->view = $view;
 		return $this;
+	}
+
+	public function set_redirect( $url ) {
+		$this->redirect = $url;
+		return $this;
+	}
+
+	public function get_redirect() {
+		return $this->redirect;
 	}
 
 	public function set_action( $action ) {
