@@ -11,6 +11,7 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 	protected $view = NULL;
 	protected $rendered = 0; // the number of times the form has been rendered
 	protected $id = '';
+	protected $errors = array();
 
 	protected $redirect = ''; // where to redirect users after this form is submitted
 
@@ -102,6 +103,26 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 
 	public function get_redirect() {
 		return $this->redirect;
+	}
+
+	/**
+	 * @param string $error
+	 */
+	public function set_error( $error ) {
+		$this->errors[] = $error;
+	}
+
+	public function get_errors() {
+		return $this->errors;
+	}
+
+	public function clear_errors( $recursive = TRUE ) {
+		$this->errors = array();
+		if ( $recursive ) {
+			foreach ( $this->get_children() as $child ) {
+				$child->clear_errors();
+			}
+		}
 	}
 
 	public function set_action( $action ) {

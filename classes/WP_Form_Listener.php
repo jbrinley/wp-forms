@@ -18,8 +18,7 @@ class WP_Form_Listener {
 		$form = wp_get_form($_REQUEST['wp_form_id']);
 		$submission = new WP_Form_Submission($form, $_REQUEST);
 		if ( !$submission->is_valid() ) {
-			$errors = $submission->get_errors();
-			// TODO: set errors on the form
+			$submission->prepare_form();
 			return;
 		}
 		$submission->submit();

@@ -18,7 +18,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	protected $default_value = '';
 	protected $value = '';
 	protected $description = '';
-
+	protected $errors = array();
 
 	/** @var WP_Form_Attributes_Interface */
 	protected $attributes = NULL;
@@ -129,6 +129,21 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 
 	public function get_id() {
 		return $this->attributes->get_attribute('id');
+	}
+
+	/**
+	 * @param string $error
+	 */
+	public function set_error( $error ) {
+		$this->errors[] = $error;
+	}
+
+	public function get_errors() {
+		return $this->errors;
+	}
+
+	public function clear_errors() {
+		$this->errors = array();
 	}
 
 	public function render() {

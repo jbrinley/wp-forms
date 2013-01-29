@@ -23,4 +23,18 @@ interface WP_Form_Component {
 	 * @return int
 	 */
 	public function get_priority();
+
+	/**
+	 * @return array
+	 */
+	public function get_errors();
+
+	/**
+	 * @param string $error
+	 * @return void
+	 */
+	public function set_error( $error );
+
+	public function clear_errors();
+
 }

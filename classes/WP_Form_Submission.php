@@ -88,6 +88,15 @@ class WP_Form_Submission {
 		$this->redirect = $url;
 	}
 
+	/**
+	 * Set values and errors on the form
+	 * to prepare it for rendering
+	 */
+	public function prepare_form() {
+		$this->prepare_form_values( $this->form );
+		$this->prepare_form_errors( $this->form );
+	}
+
 	protected function validate() {
 		if ( isset($this->errors) ) {
 			return; // already validated, and data is immutable
@@ -96,7 +105,7 @@ class WP_Form_Submission {
 		$this->errors = new WP_Error();
 		$validators = $this->form->get_validators();
 		foreach ( $validators as $callback ) {
-			call_user_func( $callback, $this->data, $this->errors, $this->form );
+			call_user_func( $callback, $this, $this->errors, $this->form );
 		}
 	}
 
@@ -110,5 +119,28 @@ class WP_Form_Submission {
 			$c = rtrim($c, ']');
 		}
 		return $components;
+	}
+
+	protected function prepare_form_errors( WP_Form_Component $component ) {
+		$errors = $this->errors->get_error_messages($component->get_name());
+		foreach ( $errors as $e ) {
+			$component->set_error($e);
+		}
+		if ( $component instanceof WP_Form_Aggregate ) {
+			foreach ( $component->get_children() as $child ) {
+				$this->prepare_form_errors( $child );
+			}
+		}
+	}
+
+	protected function prepare_form_values( WP_Form_Component $component ) {
+		if ( $component instanceof WP_Form_Aggregate ) {
+			foreach ( $component->get_children() as $child ) {
+				$this->prepare_form_values( $child );
+			}
+		} elseif ( $component instanceof WP_Form_Element ) {
+			$value = $this->get_value($component->get_name());
+			$component->set_value($value);
+		}
 	}
 }
