@@ -67,8 +67,8 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 	 * @return WP_Form_Component[], sorted by priority
 	 */
 	public function get_children() {
-		WP_Form_Element::sort_elements($this->elements);
-		return $this->elements;
+		$elements = WP_Form_Element::sort_elements($this->elements);
+		return $elements;
 	}
 
 	/**

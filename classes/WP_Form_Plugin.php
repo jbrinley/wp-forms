@@ -44,6 +44,7 @@ class WP_Form_Plugin {
 		self::$plugin_file = $plugin_file;
 		spl_autoload_register(array(__CLASS__, 'autoloader'));
 		add_action( 'init', array( 'WP_Form_Registrar', 'init' ), 11, 0 );
+		add_action( 'plugins_loaded', array( 'WP_Form_Listener', 'init' ), 10, 0 );
 	}
 
 	public static function autoloader( $class ) {

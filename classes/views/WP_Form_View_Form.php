@@ -21,7 +21,7 @@ class WP_Form_View_Form extends WP_Form_View {
 	protected function render_children( WP_Form $form ) {
 		$children = '';
 		foreach ( $form->get_children() as $child ) {
-			$children = $this->render_child($child);
+			$children .= $this->render_child($child);
 		}
 		return $children;
 	}

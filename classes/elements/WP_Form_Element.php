@@ -303,13 +303,16 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 
 	/**
 	 * @param WP_Form_Element[] $elements
+	 * @return WP_Form_Element[] A numeric array of elements
 	 */
-	public static function sort_elements( array &$elements ) {
+	public static function sort_elements( array $elements ) {
 		// use a schwartzian transform to keep elements with the same priority in the same order
 		// see http://notmysock.org/blog/php/schwartzian-transform.html
+		$elements = array_values($elements); // we don't care about associative array keys
 		array_walk( $elements, create_function( '&$v, $k' , '$v = array( $v->get_priority(), $k, $v );'));
 		asort($elements); // sorts by priority, then key
 		array_walk( $elements, create_function( '&$v, $k', '$v = $v[2];'));
+		return $elements;
 	}
 
 
