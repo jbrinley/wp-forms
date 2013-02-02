@@ -133,9 +133,11 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 
 	/**
 	 * @param string $error
+	 * @return WP_Form_Element
 	 */
 	public function set_error( $error ) {
 		$this->errors[] = $error;
+		return $this;
 	}
 
 	public function get_errors() {
@@ -144,6 +146,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 
 	public function clear_errors() {
 		$this->errors = array();
+		return $this;
 	}
 
 	public function render() {
@@ -166,7 +169,9 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 			if ( empty($this->view) ) {
 				$this->view = new WP_Form_View_Text();
 			}
-			$this->apply_default_decorators();
+			// allow other plugins/themes finer-grained control over defaults than just modifying the defaults array
+			$callback = apply_filters( 'wp_forms_default_decorators_callback', array($this, 'apply_default_decorators'), $this );
+			call_user_func($callback);
 		}
 		return $this->view;
 	}

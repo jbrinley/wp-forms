@@ -107,9 +107,11 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 
 	/**
 	 * @param string $error
+	 * @return WP_Form
 	 */
 	public function set_error( $error ) {
 		$this->errors[] = $error;
+		return $this;
 	}
 
 	public function get_errors() {
@@ -123,6 +125,7 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 				$child->clear_errors();
 			}
 		}
+		return $this;
 	}
 
 	public function set_action( $action ) {
