@@ -9,13 +9,6 @@ abstract class WP_Form_View implements WP_Form_View_Interface {
 		return '';
 	}
 
-	protected function input( WP_Form_Element $element ) {
-		$attributes = $element->get_all_attributes();
-		$attributes = WP_Form_View::prepare_attributes($attributes);
-		$template = '<input %s />';
-		return sprintf( $template, $attributes );
-	}
-
 	public static function prepare_attributes( $attributes ) {
 		$atts = array();
 		foreach ( $attributes as $key => $value ) {

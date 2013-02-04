@@ -25,7 +25,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	protected $children;
 	protected $options;
 	protected $view;
-	protected $default_view = 'WP_Form_View_Text';
+	protected $default_view = 'WP_Form_View_Input';
 	protected $default_decorators = array(
 		'WP_Form_Decorator_Description' => array(),
 		'WP_Form_Decorator_Errors' => array(),
@@ -167,7 +167,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 				}
 			}
 			if ( empty($this->view) ) {
-				$this->view = new WP_Form_View_Text();
+				$this->view = new WP_Form_View_Input();
 			}
 			// allow other plugins/themes finer-grained control over defaults than just modifying the defaults array
 			$callback = apply_filters( 'wp_forms_default_decorators_callback', array($this, 'apply_default_decorators'), $this );
