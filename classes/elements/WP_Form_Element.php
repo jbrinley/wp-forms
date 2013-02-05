@@ -321,6 +321,12 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	}
 
 
+	/**
+	 * @param $type
+	 * @param array $args
+	 *
+	 * @return WP_Form_Element|WP_Form_Element_Multiple|mixed|null
+	 */
 	public static function create( $type, $args = array() ) {
 		$element = NULL;
 		$classes = array( $type, 'WP_Form_Element_'.ucfirst($type) );
