@@ -12,7 +12,7 @@
  * @property string description
  */
 class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface {
-	protected $type = 'text';
+	protected $type = '';
 	protected $priority = 10;
 	protected $label = '';
 	protected $default_value = '';
@@ -33,8 +33,11 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 		'WP_Form_Decorator_HtmlTag' => array(),
 	);
 
-	public function __construct() {
+	public function __construct( $args = array() ) {
 		$this->attributes = new WP_Form_Attributes();
+		if ( !empty($args['type']) && empty($this->type) ) {
+			$this->type = $args['type'];
+		}
 	}
 
 	public function __get( $name ) {
