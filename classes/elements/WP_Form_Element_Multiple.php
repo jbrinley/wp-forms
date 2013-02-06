@@ -2,6 +2,8 @@
 
 /**
  * A form element with multiple options (e.g., selects, radios, checkboxes)
+ *
+ * @todo: more robust handling of optgroups
  */
 abstract class WP_Form_Element_Multiple extends WP_Form_Element {
 	protected $options = array();
