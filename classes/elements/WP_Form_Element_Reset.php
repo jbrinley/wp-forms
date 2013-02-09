@@ -1,7 +1,7 @@
 <?php
 
-class WP_Form_Element_Submit extends WP_Form_Element {
-	protected $type = 'submit';
+class WP_Form_Element_Reset extends WP_Form_Element {
+	protected $type = 'reset';
 	protected $default_decorators = array(
 		'WP_Form_Decorator_HtmlTag' => array(),
 	);
