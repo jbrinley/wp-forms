@@ -17,17 +17,17 @@ You can add various properties to your element:
 
 Acceptable parameters to `WP_Form_Element::create()` include:
 
-- text
-- textarea
-- hidden
-- password
-- radios (or radio)
-- checkboxes (or checkbox)
-- file
-- select
-- submit
-- reset
-- button
+- [text](docs/elements.md#text)
+- [textarea](docs/elements.md#textarea)
+- [hidden](docs/elements.md#hidden)
+- [password](docs/elements.md#password)
+- [radios](docs/elements.md#radio-group) (or [radio](docs/elements.md#radio))
+- [checkboxes](docs/elements.md#checkbox-group) (or [checkbox](docs/elements.md#checkbox))
+- [file](docs/elements.md#file)
+- [select](docs/elements.md#select-box)
+- [submit](docs/elements.md#submit-button)
+- [reset](docs/elements.md#reset-button)
+- [button](docs/elements.md#button)
 
 ## Creating forms
 
