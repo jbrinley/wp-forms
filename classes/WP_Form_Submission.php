@@ -23,6 +23,10 @@ class WP_Form_Submission {
 		return $this->errors;
 	}
 
+	public function add_error( $code = '', $message = '' ) {
+		$this->errors->add($code, $message);
+	}
+
 	public function submit() {
 		$processors = $this->form->get_processors();
 		foreach ( $processors as $callback ) {
@@ -105,7 +109,7 @@ class WP_Form_Submission {
 		$this->errors = new WP_Error();
 		$validators = $this->form->get_validators();
 		foreach ( $validators as $callback ) {
-			call_user_func( $callback, $this, $this->errors, $this->form );
+			call_user_func( $callback, $this, $this->form );
 		}
 	}
 
