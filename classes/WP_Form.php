@@ -9,7 +9,6 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 
 	/** @var WP_Form_View_Form */
 	protected $view = NULL;
-	protected $rendered = 0; // the number of times the form has been rendered
 	protected $id = '';
 	protected $errors = array();
 
@@ -118,6 +117,10 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 		return $this->errors;
 	}
 
+	/**
+	 * @param bool $recursive
+	 * @return WP_Form
+	 */
 	public function clear_errors( $recursive = TRUE ) {
 		$this->errors = array();
 		if ( $recursive ) {
@@ -181,13 +184,6 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 
 	public function get_classes() {
 		return $this->attributes->get_classes();
-	}
-
-	/**
-	 * @return bool Whether the component has been rendered
-	 */
-	public function is_rendered() {
-		return ($this->rendered > 0);
 	}
 
 	public function get_type() {

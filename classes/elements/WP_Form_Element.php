@@ -10,6 +10,8 @@
  * @property string default_value
  * @property string value
  * @property string description
+ * @property string id
+ * @property WP_Form_View_Interface view
  */
 class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface {
 	protected $type = '';
@@ -134,6 +136,11 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 		return $this->attributes->get_attribute('id');
 	}
 
+	public function set_id( $id ) {
+		$this->attributes->set_attribute('id', $id );
+		return $this;
+	}
+
 	/**
 	 * @param string $error
 	 * @return WP_Form_Element
@@ -147,6 +154,9 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 		return $this->errors;
 	}
 
+	/**
+	 * @return WP_Form_Element
+	 */
 	public function clear_errors() {
 		$this->errors = array();
 		return $this;
@@ -213,13 +223,6 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 		return $this;
 	}
 
-	/**
-	 * @return bool Whether the component has been rendered
-	 */
-	public function is_rendered() {
-		return $this->rendered;
-	}
-
 	/* WP_Form_Attributes_Interface ***********************
 	*******************************************************/
 
@@ -228,6 +231,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	 * @param string $key
 	 * @param string $value
 	 *
+	 * @throws InvalidArgumentException
 	 * @return WP_Form_Element
 	 */
 	public function set_attribute( $key, $value ) {

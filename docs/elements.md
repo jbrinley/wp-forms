@@ -4,18 +4,40 @@ Element API
 Properties
 ----------
 
-`type` - (string, read-only) The element type.
-`priority` - (integer) Controls sorting of elements in a form. Smaller numbers are rendered first.
-`label` - (string) The element's label.
-`name` - (string) The value of the element's `name` attribute.
 `default_value` - (mixed) The default value for the element.
-`value` - (mixed) The submitted value for the element.
+
 `description` - (string) The element's description.
+
+`id` - (string) The element's ID attribute.
+
+`label` - (string) The element's label.
+
+`name` - (string) The value of the element's `name` attribute.
+
+`priority` - (integer) Controls sorting of elements in a form. Smaller numbers are rendered first.
+
+`type` - (string, read-only) The element type.
+
+`value` - (mixed) The submitted value for the element.
+
+`view` - (WP_Form_View_Interface) The view that will render the element
 
 Methods
 -------
 
-TODO - document `WP_Form_Element` methods
+Form elements implement all methods defined in the [WP_Form_Component](../classes/WP_Form_Component.php) interface. See the PHPDocs for more information.
+
+Form elements implement all methods defined in the [WP_Form_Attributes_Interface](../classes/WP_Form_Attributes_Interface) interface. See the PHPDocs for more information.
+
+All of the above properties may be read using the `get_*` method, where * is the property name.
+
+All of the above writable properties may be written using the `set_*` method, where * is the property name. Calls may be chained together if desired.
+
+`apply_default_decorators()` - Wrap the currently assigned view in the element's default decorators.
+
+`get_default_decorators()` - Get the decorators that will be applied by `apply_default_decorators()`.
+
+`add_decorator( string $decorator_classname, array $args )` - Wrap the current view in a decorator.
 
 Form Elements
 =============
