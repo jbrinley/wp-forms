@@ -93,7 +93,7 @@ After a form has passed validation, its processing callback(s) will be called.
 Advanced Topics
 ===============
 
-## Changing Views
+## Changing [Views](docs/views.md)
 
 Forms and elements are rendered using views. Each element has an appropriate default view, but different views (built into WP Forms, or your own custom classes) can be applied.
 
@@ -113,7 +113,7 @@ Your theme can globally override the default view for an element type. Use the `
 		return $classes;
 	}
 
-## Decorators
+## [Decorators](docs/decorators.md)
 
 What's that about `apply_default_decorators()`? Each element's view has a default set of decorators wrapping it. These add additional HTML to the final output, like labels, descriptions, HTML wrappers, etc. When you add your custom view, it won't have these wrappers by default, but you can easily add them using `apply_default_decorators()`.
 

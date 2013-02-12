@@ -1,6 +1,10 @@
 <?php
 
 abstract class WP_Form_Decorator implements WP_Form_View_Interface {
+	const POSITION_BEFORE = 0;
+	const POSITION_AFTER = 1;
+	const POSITION_SURROUND = 2;
+
 	/** @var WP_Form_View_Interface */
 	protected $component_view;
 	protected $args = array();

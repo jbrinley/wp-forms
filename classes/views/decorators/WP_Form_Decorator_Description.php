@@ -13,7 +13,7 @@ class WP_Form_Decorator_Description extends WP_Form_Decorator {
 			$args = wp_parse_args(
 				$this->args,
 				array(
-					'tag' => apply_filters('wp_form_htmltag_default', 'p'),
+					'tag' => 'p',
 					'attributes' => array(),
 				)
 			);

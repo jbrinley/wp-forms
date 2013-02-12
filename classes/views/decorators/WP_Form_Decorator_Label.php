@@ -1,10 +1,6 @@
 <?php
 
 class WP_Form_Decorator_Label extends WP_Form_Decorator {
-	const POSITION_BEFORE = 0;
-	const POSITION_AFTER = 1;
-	const POSITION_SURROUND = 2;
-
 
 	public function render( WP_Form_Component $element ) {
 		$label = '';

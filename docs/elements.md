@@ -26,7 +26,7 @@ To use a `<button>` element instead of an `<input type="button">` element, chang
 
 - `WP_Form_Decorator_Description`
 - `WP_Form_Decorator_Label`
-	- position: `WP_Form_Decorator_Label::POSITION_SURROUND`
+	- position: `WP_Form_Decorator::POSITION_SURROUND`
 - `WP_Form_Decorator_HtmlTag`
 
 ## Checkbox Group
@@ -106,7 +106,7 @@ None
 
 - `WP_Form_Decorator_Description`
 - `WP_Form_Decorator_Label`
-	- position: `WP_Form_Decorator_Label::POSITION_SURROUND`
+	- position: `WP_Form_Decorator::POSITION_SURROUND`
 - `WP_Form_Decorator_HtmlTag`
 
 ## Radio Group
