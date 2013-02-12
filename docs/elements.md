@@ -1,3 +1,22 @@
+Element API
+===========
+
+Properties
+----------
+
+`type` - (string, read-only) The element type.
+`priority` - (integer) Controls sorting of elements in a form. Smaller numbers are rendered first.
+`label` - (string) The element's label.
+`name` - (string) The value of the element's `name` attribute.
+`default_value` - (mixed) The default value for the element.
+`value` - (mixed) The submitted value for the element.
+`description` - (string) The element's description.
+
+Methods
+-------
+
+TODO - document `WP_Form_Element` methods
+
 Form Elements
 =============
 

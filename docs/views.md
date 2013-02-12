@@ -21,6 +21,11 @@ Displays an entire form, including the opening/closing `<form>` tags and any ele
 
 Displays an `<input>` element. The `type` attribute is determined by the element displayed.
 
+`WP_Form_View_PartialForm`
+--------------------------
+
+Displays a form's children without the enclosing <form> tag.
+
 `WP_Form_View_Radios`
 ---------------------
 
