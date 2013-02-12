@@ -54,8 +54,6 @@ Creates a group of checkboxes. Add options to the group using the `add_option()`
 
 ## File Upload
 
-Note: TODO
-
 	WP_Form_Element::create('file');
 
 ### Default View
@@ -195,8 +193,6 @@ To use a `<button type="submit">` element instead of an `<input type="submit">` 
 - `WP_Form_Decorator_HtmlTag`
 
 ## Textarea
-
-Note: TODO
 
 	WP_Form_Element::create('textarea');
 
