@@ -200,6 +200,19 @@ To use a `<button type="submit">` element instead of an `<input type="submit">` 
 
 `WP_Form_View_Textarea`
 
+To use WordPress's built-in visual editor:
+
+	WP_Form_Element::create('textarea')
+		->set_view(new WP_Form_View_WPEditor())
+		->apply_default_decorators();
+
+If you want to pass additional parameters to `wp_editor`:
+
+	$view = new WP_Form_View_WPEditor();
+	$view->setting('media_buttons', FALSE);
+	$view->setting('tinymce', FALSE);
+	$view->setting('quicktags', TRUE);
+
 ### Default Decorators
 
 - `WP_Form_Decorator_Description`
