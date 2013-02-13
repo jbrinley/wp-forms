@@ -27,7 +27,7 @@ Methods
 
 Form elements implement all methods defined in the [WP_Form_Component](../classes/WP_Form_Component.php) interface. See the PHPDocs for more information.
 
-Form elements implement all methods defined in the [WP_Form_Attributes_Interface](../classes/WP_Form_Attributes_Interface) interface. See the PHPDocs for more information.
+Form elements implement all methods defined in the [WP_Form_Attributes_Interface](../classes/WP_Form_Attributes_Interface.php) interface. See the PHPDocs for more information.
 
 All of the above properties may be read using the `get_*` method, where * is the property name.
 

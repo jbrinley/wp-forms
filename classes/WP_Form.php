@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @property string action
+ * @property-read string id
+ * @property string method
+ * @property string redirect
+ * @property-read string type
+ * @property WP_Form_View_Interface view
+ */
 class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 	/** @var WP_Form_Component[] */
 	protected $elements = array();
@@ -21,6 +29,21 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 		$this->id = $id;
 		$this->attributes = new WP_Form_Attributes();
 		$this->set_default_attributes();
+	}
+
+	public function __get( $name ) {
+		if ( method_exists( $this, 'get_'.$name ) ) {
+			return $this->{'get_'.$name}();
+		} else {
+			throw new InvalidArgumentException(sprintf(__('Undefined property: %s'), $name));
+		}
+	}
+	public function __set( $name, $value ) {
+		if ( method_exists( $this, 'set_'.$name ) ) {
+			return $this->{'set_'.$name}( $value );
+		} else {
+			throw new InvalidArgumentException(sprintf(__('Undefined property: %s'), $name));
+		}
 	}
 
 	/**
