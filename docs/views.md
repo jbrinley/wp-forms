@@ -24,7 +24,7 @@ Displays an `<input>` element. The `type` attribute is determined by the element
 `WP_Form_View_PartialForm`
 --------------------------
 
-Displays a form's children without the enclosing <form> tag.
+Displays a form's children without the enclosing `<form>` tag.
 
 `WP_Form_View_Radios`
 ---------------------
