@@ -45,7 +45,8 @@ function wp_deregister_form( $form_id ) {
 function wp_get_form( $form_id ) {
 	$registrar = WP_Form_Registrar::get_instance();
 	try {
-		$form = $registrar->get_form($form_id);
+		$args = func_get_args();
+		$form = call_user_func_array( array( $registrar, 'get_form' ), $args );
 	} catch ( Exception $e ) {
 		if ( defined('WP_DEBUG') && WP_DEBUG ) {
 			throw $e;

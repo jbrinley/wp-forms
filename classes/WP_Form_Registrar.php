@@ -44,8 +44,14 @@ class WP_Form_Registrar {
 		if ( !isset($this->instantiated_forms[$form_id]) ) {
 			$form = new WP_Form( $form_id ); // The form that we'll we working with today
 			$form->setup_nonce_fields();
-			call_user_func($this->registered_forms[$form_id], $form);
-			do_action( 'wp_form_get_form', $form );
+
+			$args = func_get_args();
+			$args[0] =& $form; // replace form ID with the form
+
+			// build the form
+			call_user_func_array($this->registered_forms[$form_id], $args);
+			do_action_ref_array( 'wp_form_get_form', $args );
+
 			$this->instantiated_forms[$form_id] = $form;
 		}
 		return $this->instantiated_forms[$form_id];
