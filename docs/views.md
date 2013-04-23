@@ -31,7 +31,7 @@ Displays a form's children without the enclosing `<form>` tag.
 
 Displays a group of radio buttons.
 
-`WP_Form_View Select`
+`WP_Form_View_Select`
 ---------------------
 
 Displays a `<select>` element.
