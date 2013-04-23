@@ -194,6 +194,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 		foreach ( $defaults as $class => $args ) {
 			$this->add_decorator( $class, $args );
 		}
+		return $this;
 	}
 
 	public function get_default_decorators() {
