@@ -10,7 +10,7 @@ class WP_Form_Submission {
 
 	public function __construct( WP_Form $form, array $data ) {
 		$this->form = $form;
-		$this->data = $data;
+		$this->data = stripslashes_deep($data);
 	}
 
 	public function is_valid() {
