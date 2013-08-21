@@ -33,7 +33,7 @@ interface WP_Form_Aggregate extends WP_Form_Component {
 	 *
 	 * @param string $key
 	 *
-	 * @return WP_Form_Component
+	 * @return WP_Form_Component|NULL
 	 */
 	public function get_element( $key );
 

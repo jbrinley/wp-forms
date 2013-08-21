@@ -61,18 +61,25 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 		return $this->type;
 	}
 
+	/**
+	 * @param string $name
+	 * @return $this
+	 */
 	public function set_name( $name ) {
 		$this->attributes->set_attribute('name', $name);
 		return $this;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_name() {
 		return $this->attributes->get_attribute('name');
 	}
 
 	/**
 	 * @param int $priority
-	 * @return WP_Form_Element
+	 * @return $this
 	 */
 	public function set_priority( $priority ) {
 		$this->priority = (int)$priority;
@@ -86,24 +93,35 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 		return $this->priority;
 	}
 
+
+	/**
+	 * @param mixed $default_value
+	 * @return $this
+	 */
 	public function set_default_value( $default_value ) {
 		$this->default_value = $default_value;
 		return $this;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function get_default_value() {
 		return $this->default_value;
 	}
 
 	/**
 	 * @param string $label
-	 * @return WP_Form_Element
+	 * @return $this
 	 */
 	public function set_label( $label ) {
 		$this->label = $label;
 		return $this;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_label() {
 		return $this->label;
 	}
@@ -115,6 +133,11 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 		return $this->value;
 	}
 
+
+	/**
+	 * @param mixed $value
+	 * @return $this
+	 */
 	public function set_value( $value ) {
 		$this->value = $value;
 		return $this;
@@ -127,15 +150,26 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 		return $this->description;
 	}
 
+	/**
+	 * @param mixed $description
+	 * @return $this
+	 */
 	public function set_description( $description ) {
 		$this->description = $description;
 		return $this;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_id() {
 		return $this->attributes->get_attribute('id');
 	}
 
+	/**
+	 * @param string $id
+	 * @return $this
+	 */
 	public function set_id( $id ) {
 		$this->attributes->set_attribute('id', $id );
 		return $this;
@@ -143,7 +177,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 
 	/**
 	 * @param string $error
-	 * @return WP_Form_Element
+	 * @return $this
 	 */
 	public function set_error( $error ) {
 		$this->errors[] = $error;
@@ -155,19 +189,25 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	}
 
 	/**
-	 * @return WP_Form_Element
+	 * @return $this
 	 */
 	public function clear_errors() {
 		$this->errors = array();
 		return $this;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function render() {
 		$view = $this->get_view();
 		$html = $view->render( $this );
 		return $html;
 	}
 
+	/**
+	 * @return WP_Form_View_Interface
+	 */
 	public function get_view() {
 		if ( empty($this->view) ) {
 			$classes = array( $this->default_view, 'WP_Form_View_'.ucfirst($this->get_type()) );
@@ -189,6 +229,9 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 		return $this->view;
 	}
 
+	/**
+	 * @return $this
+	 */
 	public function apply_default_decorators() {
 		$defaults = $this->get_default_decorators();
 		foreach ( $defaults as $class => $args ) {
@@ -197,6 +240,9 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 		return $this;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_default_decorators() {
 		$defaults = apply_filters( 'wp_form_default_decorators', $this->default_decorators, $this );
 		return $defaults;
@@ -219,6 +265,10 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 		return $this;
 	}
 
+	/**
+	 * @param WP_Form_View_Interface $view
+	 * @return $this
+	 */
 	public function set_view( WP_Form_View_Interface $view ) {
 		$this->view = $view;
 		return $this;
@@ -333,7 +383,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	 * @param $type
 	 * @param array $args
 	 *
-	 * @return WP_Form_Element|WP_Form_Element_Multiple|mixed|null
+	 * @return WP_Form_Element|null
 	 */
 	public static function create( $type, $args = array() ) {
 		$element = NULL;

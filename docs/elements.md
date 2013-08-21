@@ -93,6 +93,29 @@ Creates a group of checkboxes. Add options to the group using the `add_option()`
 - `WP_Form_Decorator_Label`
 - `WP_Form_Decorator_HtmlTag`
 
+## Fieldset
+
+	WP_Form_Element::create('fieldset');
+
+Add and remove elements in a fieldset just as you would with a form. You can nest fieldsets to any arbitrary depth.
+
+	$fieldset = WP_Form_Element::create( 'fieldset' )
+		->set_label( 'The Fieldset Legend' )
+		->add_element( WP_Form_Element::create( 'text' )->set_name( 'username' ) )
+		->add_element( WP_Form_Element::create( 'password' )->set_name( 'password' ) );
+
+	$fieldset->remove_element( 'password' );
+
+	$fieldset->add_element( WP_Form_Element::create( 'text' )->set_name( 'email' )->set_priority( 5 ) );
+
+### Default View
+
+`WP_Form_View_Fieldset`
+
+### Default Decorators
+
+None
+
 ## File Upload
 
 	WP_Form_Element::create('file');
