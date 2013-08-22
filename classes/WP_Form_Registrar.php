@@ -34,6 +34,13 @@ class WP_Form_Registrar {
 		return FALSE;
 	}
 
+	/**
+	 * @param string $form_id
+	 *
+	 * @return WP_Form
+	 * @throws BadFunctionCallException
+	 * @throws InvalidArgumentException
+	 */
 	public function get_form( $form_id ) {
 		if ( !isset($this->registered_forms[$form_id]) ) {
 			throw new InvalidArgumentException(sprintf(__('Form %s is not registered.', 'wp-forms'), $form_id));
@@ -68,6 +75,19 @@ class WP_Form_Registrar {
 	public static function init() {
 		self::get_instance(); // make sure we're initialized
 		do_action( 'wp_forms_register' );
+	}
+
+	/**
+	 * Destroy the existing instance of the class and create a new one.
+	 *
+	 * This is mostly useful for testing, as it can return the singleton
+	 * to a pristine state.
+	 *
+	 * @return void
+	 */
+	public static function reinit() {
+		self::$instance = NULL;
+		self::init();
 	}
 
 	/**
