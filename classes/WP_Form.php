@@ -79,10 +79,18 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 	 * @return null|WP_Form_Component
 	 */
 	public function get_element( $key ) {
-		if ( empty($this->elements[$key]) ) {
-			return NULL;
+		if ( !empty($this->elements[$key]) ) {
+			return $this->elements[$key];
 		}
-		return $this->elements[$key];
+		foreach ( $this->elements as $e ) {
+			if ( $e instanceof WP_Form_Aggregate ) {
+				$child = $e->get_element($key);
+				if ( !empty($child) ) {
+					return $child;
+				}
+			}
+		}
+		return NULL;
 	}
 
 	/**

@@ -55,10 +55,18 @@ class WP_Form_Element_Fieldset extends WP_Form_Element implements WP_Form_Aggreg
 	 * @return WP_Form_Component|NULL
 	 */
 	public function get_element( $key ) {
-		if ( empty($this->elements[$key]) ) {
-			return NULL;
+		if ( !empty($this->elements[$key]) ) {
+			return $this->elements[$key];
 		}
-		return $this->elements[$key];
+		foreach ( $this->elements as $e ) {
+			if ( $e instanceof WP_Form_Aggregate ) {
+				$child = $e->get_element($key);
+				if ( !empty($child) ) {
+					return $child;
+				}
+			}
+		}
+		return NULL;
 	}
 
 	/**
