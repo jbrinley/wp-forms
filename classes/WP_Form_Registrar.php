@@ -48,20 +48,21 @@ class WP_Form_Registrar {
 		if ( !is_callable($this->registered_forms[$form_id]) ) {
 			throw new BadFunctionCallException(sprintf(__('Invalid callback for form %s', 'wp-forms'), $form_id));
 		}
-		if ( !isset($this->instantiated_forms[$form_id]) ) {
+		$args = func_get_args();
+		$argument_hash = md5(serialize($args));
+		if ( !isset($this->instantiated_forms[$form_id][$argument_hash]) ) {
 			$form = new WP_Form( $form_id ); // The form that we'll we working with today
 			$form->setup_nonce_fields();
 
-			$args = func_get_args();
 			$args[0] =& $form; // replace form ID with the form
 
 			// build the form
 			call_user_func_array($this->registered_forms[$form_id], $args);
 			do_action_ref_array( 'wp_form_get_form', $args );
 
-			$this->instantiated_forms[$form_id] = $form;
+			$this->instantiated_forms[$form_id][$argument_hash] = $form;
 		}
-		return $this->instantiated_forms[$form_id];
+		return $this->instantiated_forms[$form_id][$argument_hash];
 	}
 
 	/********** Singleton *************/
