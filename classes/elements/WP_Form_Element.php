@@ -224,7 +224,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 			}
 			// allow other plugins/themes finer-grained control over defaults than just modifying the defaults array
 			$callback = apply_filters( 'wp_forms_default_decorators_callback', array($this, 'apply_default_decorators'), $this );
-			call_user_func($callback);
+			call_user_func($callback, $this);
 		}
 		return $this->view;
 	}
@@ -254,7 +254,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	 * @param string $decorator_class
 	 * @param array $args
 	 *
-	 * @return WP_Form_Element
+	 * @return $this
 	 * @throws InvalidArgumentException
 	 */
 	public function add_decorator( $decorator_class, $args = array() ) {
@@ -283,7 +283,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	 * @param string $value
 	 *
 	 * @throws InvalidArgumentException
-	 * @return WP_Form_Element
+	 * @return $this
 	 */
 	public function set_attribute( $key, $value ) {
 		if ( $key == 'type' ) { // we don't let the type attribute change
@@ -327,7 +327,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	/**
 	 * @param string $class
 	 *
-	 * @return WP_Form_Element
+	 * @return $this
 	 */
 	public function add_class( $class ) {
 		$this->attributes->add_class($class);
@@ -337,7 +337,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	/**
 	 * @param string $class
 	 *
-	 * @return WP_Form_Element
+	 * @return $this
 	 */
 	public function remove_class( $class ) {
 		$this->attributes->remove_class($class);
@@ -347,7 +347,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	/**
 	 * @param array $classes
 	 *
-	 * @return WP_Form_Element
+	 * @return $this
 	 */
 	public function set_classes( array $classes ) {
 		$this->attributes->set_classes($classes);

@@ -23,6 +23,7 @@ namespace PHPSTORM_META {
 			'radio' instanceof \WP_Form_Element_Radio,
 			'radios' instanceof \WP_Form_Element_Radios,
 			'reset' instanceof \WP_Form_Element_Reset,
+			'select' instanceof \WP_Form_Element_Select,
 			'submit' instanceof \WP_Form_Element_Submit,
 			'text' instanceof \WP_Form_Element_Text,
 			'textarea' instanceof \WP_Form_Element_Textarea,

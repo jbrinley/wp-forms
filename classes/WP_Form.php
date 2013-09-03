@@ -116,7 +116,17 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 
 	public function get_view() {
 		if ( empty($this->view) ) {
-			$this->set_view( new WP_Form_View_Form() );
+			$classes = array( 'WP_Form_View_Form' );
+			$classes = apply_filters( 'wp_form_view_classes', $classes, $this );
+			foreach ( $classes as $class ) {
+				if ( class_exists($class) ) {
+					$this->view = new $class();
+					break;
+				}
+			}
+			if ( empty($this->view) ) {
+				$this->view = new WP_Form_View_Form();
+			}
 		}
 		return $this->view;
 	}

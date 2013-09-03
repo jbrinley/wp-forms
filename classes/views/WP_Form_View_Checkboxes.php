@@ -32,6 +32,7 @@ class WP_Form_View_Checkboxes extends WP_Form_View {
 		foreach ( $attributes as $att => $value ) {
 			$checkbox->set_attribute($att, $value);
 		}
+		do_action('wp_form_checkbox_group_member', $checkbox);
 		return $checkbox->render();
 	}
 }

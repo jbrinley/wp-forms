@@ -32,6 +32,7 @@ class WP_Form_View_Radios extends WP_Form_View {
 		foreach ( $attributes as $att => $value ) {
 			$radio->set_attribute($att, $value);
 		}
+		do_action('wp_form_radio_group_member', $radio);
 		return $radio->render();
 	}
 }
