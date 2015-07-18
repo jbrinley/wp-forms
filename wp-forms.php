@@ -5,7 +5,7 @@ Plugin URI: https://github.com/jbrinley/wp-forms
 Description: An API for creating, altering, validating, and submitting forms via code.
 Author: Flightless
 Author URI: http://flightless.us/
-Version: 0.4
+Version: 0.4.1
 */
 /*
 Copyright (c) 2013 Flightless, Inc. http://flightless.us/
