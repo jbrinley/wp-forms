@@ -6,8 +6,8 @@ class WP_Form_Decorator_Errors extends WP_Form_Decorator {
 
 	public function render( WP_Form_Component $element ) {
 		$errors = $element->get_errors();
-		$output = '';
 		if ( $errors ) {
+			$output = '';
 			$args = wp_parse_args(
 				$this->args,
 				array(
@@ -19,11 +19,15 @@ class WP_Form_Decorator_Errors extends WP_Form_Decorator {
 				)
 			);
 
-			$output = '<' . $args['tag'] . ' ' . WP_Form_View::prepare_attributes( $args['attributes'] ) . '>';
 			foreach ( $errors as $error ) {
 				$output .= '<' . $args['tag_single'] . ' class="' . $args['class_single']. '">' . $error . '</' . $args['tag_single'] . '>';
 			}
-			$output .= '</' . $args['tag'] . '>';
+			$output = sprintf(
+				'<%1$s %2$s>%3$s</%1$s>',
+				$args['tag'],
+				WP_Form_View::prepare_attributes( $args['attributes'] ),
+				$output
+			);
 
 			switch ( $args['position'] ) {
 				case self::POSITION_AFTER:
@@ -35,8 +39,8 @@ class WP_Form_Decorator_Errors extends WP_Form_Decorator {
 					return $output . $this->component_view->render($element);
 					break;
 			}
-
-
 		}
+
+		return $this->component_view->render($element);
 	}
 }
