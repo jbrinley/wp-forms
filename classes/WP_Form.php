@@ -75,10 +75,7 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 	}
 
 	public function get_elements_as_array() {
-		$result = array();
-
-		$result = $this->get_elements_as_array_prepare( $this->elements );
-
+		$result = (array)$this->get_elements_as_array_prepare( $this->elements );
 		return $result;
 	}
 
