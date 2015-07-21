@@ -34,6 +34,10 @@ class WP_Form_Submission {
 		}
 	}
 
+	public function sumbit_ajax() {
+		$this->submit();
+	}
+
 	/**
 	 * @param string $key The form element name, as it would be displayed
 	 * in the HTML.
@@ -90,6 +94,23 @@ class WP_Form_Submission {
 	 */
 	public function set_redirect( $url = '' ) {
 		$this->redirect = $url;
+	}
+
+	public function send_ajax_answer() {
+		$kk = '';
+		if ( !$this->is_valid() ) {
+			wp_send_json_error( $this->errors );
+		}
+		else {
+			wp_send_json_success(  );
+		}
+
+		/*foreach( $this->errors as $error ) {
+			foreach( $error as $element_name => $element_error ) {
+				$kk = '';
+
+			}
+		}*/
 	}
 
 	/**
