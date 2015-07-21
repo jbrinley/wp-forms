@@ -83,19 +83,19 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 	}
 
 	public function get_elements_as_array_prepare( array $elements ) {
+		$elements = array_values( $elements );
 		$result = array();
 
-		foreach( $elements as $name => $element ) {
-			if( $element instanceof WP_Form_Aggregate ) {
-				//foreach( $element->get_children() as $child ) {
-				$result[$name]['elements'] = $this->get_elements_as_array_prepare( $element->get_children() );
-				//}
+		$number_of = count( $elements );
+		for( $i = 0; $i < $number_of; $i++ ) {
+			if( $elements[$i] instanceof WP_Form_Aggregate ) {
+				$result[$i]['elements'] = $this->get_elements_as_array_prepare( $elements[$i]->get_children() );
 			}
 
-			$result[$name]['priority'] = $element->get_priority();
-			$result[$name]['label'] = $element->get_label();
-			$result[$name]['description'] = $element->get_description();
-			$result[$name]['attributes'] = $element->get_all_attributes();
+			$result[$i]['priority'] = $elements[$i]->get_priority();
+			$result[$i]['label'] = $elements[$i]->get_label();
+			$result[$i]['description'] = $elements[$i]->get_description();
+			$result[$i]['attributes'] = $elements[$i]->get_all_attributes();
 		}
 
 
