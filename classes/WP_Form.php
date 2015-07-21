@@ -74,6 +74,71 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 		return $this;
 	}
 
+	public function get_elements_as_array() {
+		$result = array();
+
+		$result = $this->get_elements_as_array_prepare( $this->elements );
+
+		return $result;
+	}
+
+	public function get_elements_as_array_prepare( array $elements ) {
+		$result = array();
+
+		foreach( $elements as $name => $element ) {
+			if( $element instanceof WP_Form_Aggregate ) {
+				//foreach( $element->get_children() as $child ) {
+				$result[$name]['elements'] = $this->get_elements_as_array_prepare( $element->get_children() );
+				//}
+			}
+
+			$result[$name]['priority'] = $element->get_priority();
+			$result[$name]['label'] = $element->get_label();
+			$result[$name]['description'] = $element->get_description();
+			$result[$name]['attributes'] = $element->get_all_attributes();
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+		/*$result['priority'] = $element->get_priority();
+		$result['label'] = $element->get_label();
+		$result['description'] = $element->get_description();
+		$result['attributes'] = $element->get_all_attributes();*/
+
+		//$empty_or = empty( $element->elements );
+		//$array_or = is_array( $element->elements );
+
+		/*if( !empty( $element->elements ) && is_array( $element->elements ) ) {
+			foreach( $element->elements as $inner_name => $inner_element ) {
+				$result['elements'][$inner_name] = $this->get_element_as_array( $inner_element );
+			}
+		}*/
+
+		/*if( $element instanceof WP_Form_Aggregate ) {
+			foreach ( $element->get_children() as $child ) {
+				$this->prepare_form_values( $child );
+			}
+		}*/
+
+		/*if( $element instanceof WP_Form_Aggregate ) {
+			foreach( $element->get_children() as $child) {
+				$child;
+				$result[$name]['elements'][] = $this->get_element_as_array( $child );
+			}
+		}*/
+
+		return $result;
+	}
+
 	/**
 	 * @param $key
 	 * @return null|WP_Form_Component

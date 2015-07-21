@@ -97,20 +97,13 @@ class WP_Form_Submission {
 	}
 
 	public function send_ajax_answer() {
-		$kk = '';
+		$elements = $this->form->get_elements_as_array();
 		if ( !$this->is_valid() ) {
-			wp_send_json_error( $this->errors );
+			wp_send_json_error( $elements );
 		}
 		else {
-			wp_send_json_success(  );
+			wp_send_json_success( $elements );
 		}
-
-		/*foreach( $this->errors as $error ) {
-			foreach( $error as $element_name => $element_error ) {
-				$kk = '';
-
-			}
-		}*/
 	}
 
 	/**
