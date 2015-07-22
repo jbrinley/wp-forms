@@ -12,7 +12,7 @@ class WP_Form_View_Markup extends WP_Form_View {
 	}
 
 	protected function markup( WP_Form_Element $element ) {
-		$value = $element->get_value();
+		$content = $element->get_content();
 
 		$attributes = $element->get_all_attributes();
 
@@ -20,7 +20,7 @@ class WP_Form_View_Markup extends WP_Form_View {
 		$attributes = WP_Form_View::prepare_attributes($attributes);
 
 		$template = '<div %s>%s</div>';
-		return sprintf( $template, $attributes, $value );
+		return sprintf( $template, $attributes, $content );
 	}
 
 }
