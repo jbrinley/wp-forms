@@ -34,7 +34,7 @@ class WP_Form_Submission {
 		}
 	}
 
-	public function sumbit_ajax() {
+	public function submit_ajax() {
 		$this->submit();
 	}
 
