@@ -93,6 +93,7 @@ class WP_Form implements WP_Form_Aggregate, WP_Form_Attributes_Interface {
 			$result[$i]['label'] = $elements[$i]->get_label();
 			$result[$i]['description'] = $elements[$i]->get_description();
 			$result[$i]['attributes'] = $elements[$i]->get_all_attributes();
+			$result[$i]['errors'] = $elements[$i]->get_errors();
 		}
 		return $result;
 	}
