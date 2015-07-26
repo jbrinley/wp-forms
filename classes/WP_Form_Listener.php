@@ -6,6 +6,8 @@ class WP_Form_Listener {
 
 	private function add_hooks() {
 		add_action( 'init', array( $this, 'check_form_submission' ), 111, 0 );
+		add_action( 'wp_ajax_wp_forms', array( $this, 'check_form_submission_ajax' ) );
+		add_action( 'wp_ajax_nopriv_wp_forms', array( $this, 'check_form_submission_ajax' ) );
 	}
 
 	public function check_form_submission() {
@@ -22,7 +24,39 @@ class WP_Form_Listener {
 			return;
 		}
 		$submission->submit();
+		$submission->prepare_form();
 		$submission->redirect();
+	}
+
+	/**
+	 * Similar to check_form_submission() but for AJAX requests.
+	 *
+	 * @see check_form_submission()
+	 *
+	 * @throws Exception
+	 */
+	public function check_form_submission_ajax() {
+		$kk = '';
+		if ( empty($_REQUEST['data']['wp_form_id']) || empty($_REQUEST['data']['wp_form_nonce']) ) {
+			return;
+		}
+		if ( !wp_verify_nonce($_REQUEST['data']['wp_form_nonce'], $_REQUEST['data']['wp_form_id']) ) {
+			return;
+		}
+
+		$form = wp_get_form($_REQUEST['data']['wp_form_id']);
+		$submission = new WP_Form_Submission($form, $_REQUEST['data']);
+		if ( !$submission->is_valid() ) {
+			/**
+			 * похоже здесь это не надо вызывать, т к возможно эта штука втыкает ошибки в хтмл,
+			 * а нам нужно просто подготовить ошибки и отправить их
+			 */
+			$submission->prepare_form();
+			$submission->send_ajax_answer();
+			return;
+		}
+		$submission->submit_ajax();
+		$submission->send_ajax_answer();
 	}
 
 	/********** Singleton *************/
