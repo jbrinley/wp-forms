@@ -24,6 +24,7 @@ class WP_Form_Listener {
 			return;
 		}
 		$submission->submit();
+		$submission->prepare_form();
 		$submission->redirect();
 	}
 
