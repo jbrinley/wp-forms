@@ -21,6 +21,7 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	protected $value = '';
 	protected $description = '';
 	protected $errors = array();
+	protected $content = '';
 
 	/** @var WP_Form_Attributes_Interface */
 	protected $attributes = NULL;
@@ -194,6 +195,15 @@ class WP_Form_Element implements WP_Form_Component, WP_Form_Attributes_Interface
 	public function clear_errors() {
 		$this->errors = array();
 		return $this;
+	}
+
+	public function set_content( $content ) {
+		$this->content = $content;
+		return $this;
+	}
+
+	public function get_content() {
+		return $this->content;
 	}
 
 	/**

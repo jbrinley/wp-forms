@@ -7,14 +7,19 @@ class WP_Form_View_Checkboxes extends WP_Form_View {
 			throw new LogicException(__('Cannot render checkbox group without a name', 'wp-forms'));
 		}
 		$options = $element->get_options();
+		$selected = (array) $element->get_selected();
 		$output = '';
 		foreach ( $options as $key => $label ) {
-			$output .= $this->checkbox( $key, $label, $attributes );
+			$checked = false;
+			if ( in_array( $key, $selected ) ) {
+				$checked = true;
+			}
+			$output .= $this->checkbox( $key, $label, $attributes, $checked );
 		}
 		return $output;
 	}
 
-	protected function checkbox( $key, $label, $attributes ) {
+	protected function checkbox( $key, $label, $attributes, $checked ) {
 		$checkbox = WP_Form_Element::create('checkbox')
 			->set_name($attributes['name'].'[]')
 			->set_label($label)
@@ -31,6 +36,9 @@ class WP_Form_View_Checkboxes extends WP_Form_View {
 		}
 		foreach ( $attributes as $att => $value ) {
 			$checkbox->set_attribute($att, $value);
+		}
+		if( $checked ) {
+			$checkbox->set_attribute( 'checked', 'checked' );
 		}
 		do_action('wp_form_checkbox_group_member', $checkbox);
 		return $checkbox->render();

@@ -34,6 +34,10 @@ class WP_Form_Submission {
 		}
 	}
 
+	public function submit_ajax() {
+		$this->submit();
+	}
+
 	/**
 	 * @param string $key The form element name, as it would be displayed
 	 * in the HTML.
@@ -90,6 +94,16 @@ class WP_Form_Submission {
 	 */
 	public function set_redirect( $url = '' ) {
 		$this->redirect = $url;
+	}
+
+	public function send_ajax_answer() {
+		$elements = $this->form->get_elements_as_array();
+		if ( !$this->is_valid() ) {
+			wp_send_json_error( $elements );
+		}
+		else {
+			wp_send_json_success( $elements );
+		}
 	}
 
 	/**
